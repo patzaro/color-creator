@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Color Creator</title>
+<style>
+  body {
+    font-family: sans-serif;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 24px;
+    background: #f4f4f4;
+    padding: 40px;
+  }
+
+  .circle {
+    width: 200px;
+    height: 200px;
+    border-radius: 50%;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    transition: background-color 0.05s ease;
+  }
+
+  .sliders {
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+
+  .slider-row {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .slider-row label {
+    width: 20px;
+    font-weight: bold;
+  }
+
+  .slider-row input[type="range"] {
+    flex: 1;
+  }
+
+  .slider-row span {
+    width: 40px;
+    text-align: right;
+  }
+
+  #red { accent-color: #e63946; }
+  #green { accent-color: #2a9d8f; }
+  #blue { accent-color: #457b9d; }
+
+  #hexOutput {
+    font-family: monospace;
+    font-size: 1.2em;
+  }
+</style>
+</head>
+<body>
+
+<h2>Color Creator</h2>
+
+<div class="circle" id="colorCircle"></div>
+
+<div id="hexOutput">#808080</div>
+
+<div class="sliders">
+  <div class="slider-row">
+    <label for="red">R</label>
+    <input type="range" id="red" min="0" max="255" value="128">
+    <span id="redVal">128</span>
+  </div>
+  <div class="slider-row">
+    <label for="green">G</label>
+    <input type="range" id="green" min="0" max="255" value="128">
+    <span id="greenVal">128</span>
+  </div>
+  <div class="slider-row">
+    <label for="blue">B</label>
+    <input type="range" id="blue" min="0" max="255" value="128">
+    <span id="blueVal">128</span>
+  </div>
+</div>
+
+<script>
+  const red = document.getElementById('red');
+  const green = document.getElementById('green');
+  const blue = document.getElementById('blue');
+
+  const redVal = document.getElementById('redVal');
+  const greenVal = document.getElementById('greenVal');
+  const blueVal = document.getElementById('blueVal');
+
+  const circle = document.getElementById('colorCircle');
+  const hexOutput = document.getElementById('hexOutput');
+
+  function toHex(n) {
+    return n.toString(16).padStart(2, '0');
+  }
+
+  function updateColor() {
+    const r = parseInt(red.value);
+    const g = parseInt(green.value);
+    const b = parseInt(blue.value);
+
+    redVal.textContent = r;
+    greenVal.textContent = g;
+    blueVal.textContent = b;
+
+    const color = `rgb(${r}, ${g}, ${b})`;
+    circle.style.backgroundColor = color;
+    hexOutput.textContent = `#${toHex(r)}${toHex(g)}${toHex(b)}`.toUpperCase();
+  }
+
+  [red, green, blue].forEach(slider => {
+    slider.addEventListener('input', updateColor);
+  });
+
+  updateColor();
+</script>
+
+</body>
+</html>

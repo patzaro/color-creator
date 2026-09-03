@@ -1,0 +1,344 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🎨 Color Creator · RGB Circle</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+        }
+
+        body {
+            background: linear-gradient(145deg, #f5f7fc 0%, #e9edf5 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-family: 'Segoe UI', Roboto, system-ui, -apple-system, sans-serif;
+            padding: 1.5rem;
+            margin: 0;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            border-radius: 3rem;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15), 0 6px 12px rgba(0, 0, 0, 0.05);
+            padding: 2.5rem 2.8rem 3rem;
+            max-width: 600px;
+            width: 100%;
+            transition: box-shadow 0.2s;
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        h1 {
+            font-weight: 500;
+            font-size: 1.9rem;
+            letter-spacing: -0.5px;
+            color: #1b1f2b;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid rgba(0, 0, 0, 0.06);
+            padding-bottom: 0.8rem;
+        }
+
+        h1 span {
+            background: #1b1f2b;
+            color: white;
+            font-size: 1rem;
+            padding: 0.1rem 0.9rem;
+            border-radius: 40px;
+            margin-left: 0.3rem;
+        }
+
+        .slider-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1.6rem;
+            margin-top: 0.5rem;
+        }
+
+        .slider-group {
+            display: flex;
+            align-items: center;
+            gap: 1.2rem;
+        }
+
+        .slider-label {
+            width: 3.5rem;
+            font-weight: 600;
+            font-size: 1.3rem;
+            letter-spacing: 0.5px;
+            color: #2c313e;
+        }
+
+        .slider-label.r { color: #c02a2a; }
+        .slider-label.g { color: #1f8b3a; }
+        .slider-label.b { color: #1f5b9e; }
+
+        input[type="range"] {
+            flex: 1;
+            height: 8px;
+            -webkit-appearance: none;
+            appearance: none;
+            background: #d0d7e6;
+            border-radius: 12px;
+            outline: none;
+            transition: background 0.15s;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 0 0 2px rgba(255,255,255,0.8);
+            border: 1px solid rgba(0,0,0,0.1);
+            transition: 0.08s;
+            cursor: grab;
+        }
+
+        input[type="range"]::-webkit-slider-thumb:hover {
+            transform: scale(1.08);
+            background: #fafafa;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 22px;
+            height: 22px;
+            border-radius: 50%;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(0,0,0,0.1);
+            cursor: grab;
+        }
+
+        .value-badge {
+            min-width: 3.2rem;
+            text-align: right;
+            font-feature-settings: "tnum";
+            font-weight: 500;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 0.25rem 0.6rem;
+            border-radius: 30px;
+            font-size: 1rem;
+            color: #1f2535;
+            letter-spacing: 0.3px;
+        }
+
+        /* ---------- circle + hex ---------- */
+        .preview-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 2.4rem;
+            padding-top: 1.8rem;
+            border-top: 2px solid rgba(0, 0, 0, 0.05);
+        }
+
+        .circle-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        .circle {
+            width: 130px;
+            height: 130px;
+            border-radius: 50%;
+            background: #000000; /* will be overridden by js */
+            box-shadow: 0 12px 28px rgba(0, 0, 0, 0.25), 0 0 0 2px rgba(255, 255, 255, 0.7);
+            transition: background 0.07s ease;
+            border: 2px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .hex-display {
+            margin-top: 1.2rem;
+            background: rgba(0, 0, 0, 0.04);
+            padding: 0.5rem 1.8rem;
+            border-radius: 50px;
+            font-size: 1.5rem;
+            font-weight: 600;
+            letter-spacing: 1px;
+            color: #1d232e;
+            box-shadow: inset 0 1px 3px rgba(0,0,0,0.05);
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.4);
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        .hex-display span {
+            font-weight: 300;
+            color: #4a5268;
+            margin-right: 0.3rem;
+        }
+
+        .rgb-tag {
+            display: flex;
+            gap: 1.2rem;
+            margin-top: 0.5rem;
+            font-size: 0.95rem;
+            color: #2d3445;
+            background: rgba(255,255,255,0.3);
+            padding: 0.3rem 1.4rem;
+            border-radius: 40px;
+            backdrop-filter: blur(2px);
+            border: 1px solid rgba(255,255,255,0.2);
+        }
+
+        .rgb-tag strong {
+            font-weight: 600;
+        }
+
+        .rgb-tag .r { color: #b12b2b; }
+        .rgb-tag .g { color: #1b7a33; }
+        .rgb-tag .b { color: #1b5091; }
+
+        .footer-note {
+            margin-top: 1.6rem;
+            font-size: 0.8rem;
+            color: #5e677e;
+            text-align: center;
+            opacity: 0.7;
+            letter-spacing: 0.3px;
+        }
+
+        @media (max-width: 480px) {
+            .card { padding: 1.8rem; }
+            .slider-group { gap: 0.8rem; }
+            .slider-label { width: 2.8rem; font-size: 1.1rem; }
+            .circle { width: 110px; height: 110px; }
+            .hex-display { font-size: 1.2rem; padding: 0.3rem 1.2rem; }
+        }
+    </style>
+</head>
+<body>
+    <div class="card" role="main" aria-label="RGB color creator">
+        <h1>
+            🎨 Color Creator
+            <span>RGB</span>
+        </h1>
+
+        <div class="slider-container">
+            <!-- RED -->
+            <div class="slider-group">
+                <span class="slider-label r">R</span>
+                <input type="range" id="redSlider" min="0" max="255" value="180" step="1" aria-label="Red value">
+                <span class="value-badge" id="redValue">180</span>
+            </div>
+            <!-- GREEN -->
+            <div class="slider-group">
+                <span class="slider-label g">G</span>
+                <input type="range" id="greenSlider" min="0" max="255" value="100" step="1" aria-label="Green value">
+                <span class="value-badge" id="greenValue">100</span>
+            </div>
+            <!-- BLUE -->
+            <div class="slider-group">
+                <span class="slider-label b">B</span>
+                <input type="range" id="blueSlider" min="0" max="255" value="210" step="1" aria-label="Blue value">
+                <span class="value-badge" id="blueValue">210</span>
+            </div>
+        </div>
+
+        <div class="preview-section">
+            <div class="circle-wrapper">
+                <div class="circle" id="colorCircle" style="background: rgb(180, 100, 210);"></div>
+            </div>
+            <div class="hex-display" id="hexDisplay">
+                <span>#</span><span id="hexText">B464D2</span>
+            </div>
+            <div class="rgb-tag">
+                <span><strong class="r">R</strong> <span id="tagRed">180</span></span>
+                <span><strong class="g">G</strong> <span id="tagGreen">100</span></span>
+                <span><strong class="b">B</strong> <span id="tagBlue">210</span></span>
+            </div>
+        </div>
+        <div class="footer-note">✧ move sliders · instant color preview ✧</div>
+    </div>
+
+    <script>
+        (function() {
+            "use strict";
+
+            // DOM refs
+            const redSlider = document.getElementById('redSlider');
+            const greenSlider = document.getElementById('greenSlider');
+            const blueSlider = document.getElementById('blueSlider');
+            const redValue = document.getElementById('redValue');
+            const greenValue = document.getElementById('greenValue');
+            const blueValue = document.getElementById('blueValue');
+            const colorCircle = document.getElementById('colorCircle');
+            const hexText = document.getElementById('hexText');
+            const tagRed = document.getElementById('tagRed');
+            const tagGreen = document.getElementById('tagGreen');
+            const tagBlue = document.getElementById('tagBlue');
+
+            // Helper: format hex with 2 digits
+            function toHex(value) {
+                const hex = parseInt(value, 10).toString(16).toUpperCase();
+                return hex.length === 1 ? '0' + hex : hex;
+            }
+
+            // Update all UI from current slider values
+            function updateColor() {
+                // read values (as numbers)
+                const r = parseInt(redSlider.value, 10);
+                const g = parseInt(greenSlider.value, 10);
+                const b = parseInt(blueSlider.value, 10);
+
+                // update numeric badges
+                redValue.textContent = r;
+                greenValue.textContent = g;
+                blueValue.textContent = b;
+
+                // update RGB tags below circle
+                tagRed.textContent = r;
+                tagGreen.textContent = g;
+                tagBlue.textContent = b;
+
+                // build color string
+                const rgbString = `rgb(${r}, ${g}, ${b})`;
+                colorCircle.style.background = rgbString;
+
+                // build hex string
+                const hex = `#${toHex(r)}${toHex(g)}${toHex(b)}`;
+                hexText.textContent = hex.toUpperCase();
+            }
+
+            // event listeners for all sliders
+            redSlider.addEventListener('input', updateColor);
+            greenSlider.addEventListener('input', updateColor);
+            blueSlider.addEventListener('input', updateColor);
+
+            // set initial values (match default slider positions)
+            // default: R=180, G=100, B=210
+            // we set them explicitly to keep sync
+            redSlider.value = 180;
+            greenSlider.value = 100;
+            blueSlider.value = 210;
+
+            // extra safety: ensure badges and circle reflect initial state
+            // but we also call updateColor() to be safe
+            updateColor();
+
+            // optional: add keyboard support / accessibility (already fine)
+            // small extra: if someone changes the value via keyboard, update works
+
+            // (bonus) if any slider is changed programmatically, we catch it
+            // but we only use user input.
+
+            console.log('🎨 Color Creator ready · no API key needed');
+        })();
+    </script>
+
+</body>
+</html>
