@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Creator – 4 Versions</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 20px;
+            background: #f5f7fc;
+            text-align: center;
+        }
+        h1 { color: #1b1f2b; }
+        .versions {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin: 40px 0;
+        }
+        .version-card {
+            background: white;
+            padding: 30px 20px;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: #1b1f2b;
+            transition: transform 0.2s;
+        }
+        .version-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+        .version-card h2 { margin: 0; font-size: 2rem; }
+        .version-card p { color: #666; margin: 10px 0 0; }
+    </style>
+</head>
+<body>
+    <h1>🎨 Color Creator</h1>
+    <p>Choose a version to try:</p>
+    <div class="versions">
+        <a href="./version-1-deepseek_v4/" class="version-card">
+            <h2>v1</h2>
+            <p>LLM 1</p>
+        </a>
+        <a href="./version-2-qwen_38_max/" class="version-card">
+            <h2>v2</h2>
+            <p>LLM 2</p>
+        </a>
+        <a href="./version-3-claude_sonnet_5/" class="version-card">
+            <h2>v3</h2>
+            <p>LLM 3</p>
+        </a>
+        <a href="./version-4-chatgpt_56_luna/" class="version-card">
+            <h2>v4</h2>
+            <p>LLM 4</p>
+        </a>
+    </div>
+</body>
+</html>
